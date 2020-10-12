@@ -58,6 +58,16 @@ export class UserService {
     }
   }
 
+  async uploadImgUser(id: string): Promise<any> {
+    try {
+      //   async createUser(usuario: any):  Promise<any> {
+      const user = await this.userModel.findById(id);
+      return user;
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+
   async login(email: string): Promise<any> {
     try {
       //   async createUser(usuario: any):  Promise<any> {

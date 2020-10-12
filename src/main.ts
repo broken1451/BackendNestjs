@@ -17,7 +17,8 @@ async function bootstrap() {
   app.use(bodyParser.json());
 
   // FileUpload
-  app.use(fileUpload({ useTempFiles: true }));
+  // app.use(fileUpload({ useTempFiles: true }));
+  app.use(fileUpload());  
 
   // Cors
   app.use(cors({ origin: true, credentials: true }));

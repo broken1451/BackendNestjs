@@ -11,6 +11,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from './user/user.controller';
 import * as dotenv from 'dotenv';
 import { VerifyTokenMiddleware } from './verify-token.middleware';
+import { MulterModule } from '@nestjs/platform-express';
 dotenv.config();
 
 @Module({
@@ -22,6 +23,9 @@ dotenv.config();
       useCreateIndex: true,
       useFindAndModify: false,
     }),
+    MulterModule.register({
+      dest:'./uploads'
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -42,6 +46,10 @@ export class AppModule implements NestModule {
         {
           path: 'user/create',
           method: RequestMethod.POST,
+        },
+        {
+          path: 'user/upload/',
+          method: RequestMethod.PUT,
         }
       ).forRoutes(UserController);
   }
