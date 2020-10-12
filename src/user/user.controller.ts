@@ -16,6 +16,7 @@ import { UserService } from './user.service';
 import { NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UserInterface } from './interfaces/user.interfaces';
+import Token from 'src/utils/token';
 
 
 
@@ -44,11 +45,13 @@ export class UserController {
         user.password =  bcrypt.hashSync(user.password, 10);
         console.log({pass: bcrypt.hashSync(user.password, 10)});
         const userCreated: UserInterface = await this.userService.createUser(user);
+        const token = Token.getJwtToken(userCreated)
         return res.status(HttpStatus.OK).json({
           ok: true,
           menssage: 'funciona',
           // user,
           userCreated,
+          token
         });
       } catch (error) {
         console.log('error', error)

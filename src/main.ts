@@ -21,6 +21,6 @@ async function bootstrap() {
 
   // Cors
   app.use(cors({ origin: true, credentials: true }));
-  await app.listen(3001);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
