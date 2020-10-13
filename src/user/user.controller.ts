@@ -20,11 +20,14 @@ import { NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UserInterface } from './interfaces/user.interfaces';
 import Token from 'src/utils/token';
-import fs from 'fs';
+import FileSystem from 'fs';
 import * as fileUpload from 'express-fileupload';
 import * as express from 'express';
 import { AnyFilesInterceptor, FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
+import * as Path from 'path';
+
+
 
 
 const app = express();
@@ -183,7 +186,7 @@ export class UserController {
       }
 
       if (!req.files) {
-        return res.status(400).json({
+        return res.status(400).json({ 
           ok: false,
           mensaje: "No selecciono nada",
           errors: { message: "Debe de seleccionar una imagen" },
@@ -212,16 +215,22 @@ export class UserController {
         // Nombre de archivo personalizado
         const nombreImagenPersonalizado = `${id}-${new Date().getMilliseconds()}.${extensionArchivo}`;
 
-        // Mover el archivo  del temporal a un path en especifico
-        const path = `../uploads/${tipoImagen}/${nombreImagenPersonalizado}`;
-        console.log(path)
+        // Mover el archivo  del temporal a un path en especifico 
+        // const pat = Path.dirname(__dirname + '/sdsd' );  
+        const path = `/home/muho/Documents/nestJs/invertario/dist/uploads/${tipoImagen}/${nombreImagenPersonalizado}`;  
+     
+        // const path = `../uploads/${tipoImagen}/${nombreImagenPersonalizado}`;
+
+        // const path = `/home/muho/Documents/nestJs/invertario/dist/uploads/${tipoImagen}/${nombreImagenPersonalizado}`;
+        console.log({path})
+        // nombreArchivo.mv(path, (err) => {
         nombreArchivo.mv(path, (err) => {
           if (err) {
             console.log({err})
             return res.status(500).json({
               ok: false,
               mensaje: "Error al mover archivo",
-              errors: err
+              errors: err 
             });
           }
         })
@@ -238,6 +247,7 @@ export class UserController {
           // extensionArchivo,
           nombreImagenPersonalizado,
           path,
+          // pat
           // file
           // // user,
           // userUpdate,
