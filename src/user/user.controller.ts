@@ -26,6 +26,8 @@ import * as express from 'express';
 import { AnyFilesInterceptor, FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import * as Path from 'path';
+import { Usuario } from './schema/userSchema';
+
 
 
 
@@ -168,7 +170,7 @@ export class UserController {
   // ]))
   // @UseInterceptors(AnyFilesInterceptor())
   async uploadoImage(@UploadedFiles() file ,@Req() req, @Res() res: Response, @Body() user: any, @Param('id') id: string,  @Param('tipoImagen') tipoImagen: string) {
-    console.log({file});
+    // console.log({file});
     try {
       const imagen = tipoImagen;
       const idUser = id;
@@ -236,21 +238,23 @@ export class UserController {
         })
       
        // const userUpdate = await this.userService.updateUser(id,user);
+      //  const userUpdate = await  this.userService.subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res);
         return res.status(200).json({
           ok: true,
-          menssage: 'funciona',
-          imagen,
-          idUser,
-          // file: req.files,
-          // nombreArchivo,
-          nombreArchivoSeparado,
-          // extensionArchivo,
-          nombreImagenPersonalizado,
-          path,
+          menssage: 'funciona', 
+          // imagen,
+          // idUser,
+          // // file: req.files,
+          // // nombreArchivo,
+          // nombreArchivoSeparado,
+          // // extensionArchivo,
+          // nombreImagenPersonalizado,
+          // path,
           // pat
           // file
           // // user,
           // userUpdate,
+          // userUpdate 
         });
     } catch (error) {
       console.log(error)
@@ -270,3 +274,62 @@ export function comparPass(password: string = '', passEcripted: string) {
     return false;
   }
 }
+
+// export function subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res) {
+//   if(tipoImagen == 'usuario'){
+//     Usuario.findById(id, (err, usuario) => {
+//           if (err) {
+//             return  res.status(500).json({
+//                 ok: false,
+//                 mensaje: "Error al subir Imagen",
+//                 errors: err
+//             });
+//         }
+    
+//         if (!usuario) {
+//             return  res.status(500).json({
+//                   ok: false,
+//                   mensaje: "Error el usuario con ese id no existe",
+//                   errors: err
+//               });
+//           }
+        
+//         var pathViejo = '/home/muho/Documents/nestJs/invertario/dist/uploads/usuario/' + usuario.img; // pathViejo de la imagen si el usuario ya tiene una guardada 
+//         console.log({pathViejo})
+//           if (FileSystem.existsSync(pathViejo)) {  // si existe elimina la imagen anterior
+//             FileSystem.unlink(pathViejo,(err) => {
+//                 if (err) {
+//                     return res.status(500).json({
+//                         ok: false,
+//                         mensaje: "Error en path",
+//                         errors: err
+//                     });
+//                 }
+//             });
+//         }
+    
+//         usuario.img = nombreImagenPersonalizado;
+//         usuario.save((err, usuarioActualizado) => {
+//           if (err) {
+//             return res.status(400).json({
+//                 ok: false,
+//                 mensaje: "Error al subir imagen de usuario",
+//                 errors: err
+//             });
+//         }
+//         usuarioActualizado.password = ':)';
+//         return res.status(200).json({
+//             ok: true,
+//             mensaje: "Imagen de usuario actualizada ",
+//             usuarioActualizado: usuarioActualizado
+//           });
+//       });
+    
+    
+//     });
+//   }
+
+
+
+// }
+

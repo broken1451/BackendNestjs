@@ -19,3 +19,5 @@ export const userSchema = new mongoose.Schema({
     // usuarioSchema.plugin(uniqueValidator, {message: 'El correo debe ser unico'});
 // userSchema.plugin(uniqueValidator, {message: '{PATH} debe ser unico'});
 userSchema.plugin<any>(uniqueValidator, {message: '{PATH} debe ser unico'})
+export const Usuario = mongoose.model<any>("users", userSchema);
+// module.exports =  mongoose.model('users', userSchema);
