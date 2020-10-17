@@ -30,11 +30,11 @@ export class UserService {
       await user.save();
       return user;
     } catch (error) {
-       let res: Response;
+      let res: Response;
       console.log({ error });
       return res.status(401).json({
         ok: false,
-        error
+        error,
       });
     }
   }
@@ -61,11 +61,16 @@ export class UserService {
     }
   }
 
-  async uploadImgUser(tipoImagen, id, nombreImagenPersonalizado, res): Promise<any> {
+  async uploadImgUser(tipoImagen, id, nombreImagenPersonalizado,res): Promise<any> {
     try {
       //   async createUser(usuario: any):  Promise<any> {
-      // const user =  await this.subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res); 
-      const user =  await this.subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res); 
+      // const user =  await this.subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res);
+      const user = await this.subirImagenPorTipo(
+        tipoImagen,
+        id,
+        nombreImagenPersonalizado,
+        res,
+      );
       return user;
     } catch (error) {
       console.log({ error });
@@ -75,80 +80,74 @@ export class UserService {
   async login(email: string): Promise<any> {
     try {
       //   async createUser(usuario: any):  Promise<any> {
-      const userLogin = await this.userModel.findOne({email: email});
+      const userLogin = await this.userModel.findOne({ email: email });
       return userLogin;
     } catch (error) {
       console.log({ error });
     }
   }
 
- async subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res) {
-  if(tipoImagen == 'usuario'){
-    console.log("ACA")
+  async subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res) {
+    if (tipoImagen == 'usuario') {
+      console.log('ACA');
 
-    try {
-      this.userModel.findById(id, (err, usuario) => {
-        console.log('USER ====>>> ', usuario)
-            if (err) {
-              return  res.status(500).json({
-                  ok: false,
-                  mensaje: "Error al subir Imagen",
-                  errors: err
-              });
+      try {
+        this.userModel.findById(id, (err, usuario) => {
+          // console.log('USER ====>>> ', usuario);
+          if (err) {
+            return res.status(500).json({
+              ok: false,
+              mensaje: 'Error al subir Imagen',
+              errors: err,
+            });
           }
-      
+
           if (!usuario) {
-              return  res.status(500).json({
-                    ok: false,
-                    mensaje: "Error el usuario con ese id no existe",
-                    errors: err
-                });
-            }
-          usuario.img = nombreImagenPersonalizado;              
-          var pathViejo = '/home/muho/Documents/nestJs/invertario/dist/user/uploads/usuario/' + usuario.img; // pathViejo de la imagen si el usuario ya tiene una guardada 
-          if (FileSystem.existsSync(pathViejo)) {  // si existe elimina la imagen anterior
-            // console.log({pathViejo, user: usuario.img, usuario: usuario})
-              FileSystem.unlink(pathViejo,(err) => {
-                console.log('if unlink pathViejo', pathViejo)
-                  if (err) {
-                    console.log('aca err')
-                    console.log({pathViejo})
-                      return res.status(500).json({
-                          ok: false,
-                          mensaje: "Error en path",
-                          errors: err
-                      });
-                  }
-              });
+            return res.status(500).json({
+              ok: false,
+              mensaje: 'Error el usuario con ese id no existe',
+              errors: err,
+            });
           }
-      
-        usuario.img = nombreImagenPersonalizado;
-        usuario.save((err, usuarioActualizado) => {
-          console.log({usuarioActualizado})
+          if (usuario.img === '' || !usuario.img ) {
+            usuario.img = nombreImagenPersonalizado ;
+          } 
+          console.log({usuario, img: usuario.img })
+          const pathViejo ='/home/muho/Documents/nestJs/invertario/dist/user/uploads/usuario/' + usuario.img; // pathViejo de la imagen si el usuario ya tiene una guardada
+          if (FileSystem.existsSync(pathViejo)) {  // si existe elimina la imagen anterior
+            FileSystem.unlink(pathViejo,(err) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: "Error en path la img para ese usuario no existe",
+                        errors: err
+                    });
+                }
+            });
+        }
+
+
+          usuario.img = nombreImagenPersonalizado;
+          usuario.save((err, usuarioActualizado) => {
+            console.log({ usuarioActualizado });
             if (err) {
               return res.status(400).json({
-                  ok: false,
-                  mensaje: "Error al subir imagen de usuario",
-                  errors: err
+                ok: false,
+                mensaje: 'Error al subir imagen de usuario',
+                errors: err,
               });
-          }
-          usuarioActualizado.password = ':)';
-          return res.status(200).json({
+            }
+            usuarioActualizado.password = ':)';
+            return res.status(200).json({
               ok: true,
-              mensaje: "Imagen de usuario actualizada ",
-              usuarioActualizado: usuarioActualizado
+              mensaje: 'Imagen de usuario actualizada ',
+              usuarioActualizado: usuarioActualizado,
             });
+          });
         });
-      
-      
-      });
-    } catch (error) {
-        console.log({error})
+      } catch (error) {
+        console.log({ error });
+      }
     }
   }
-
-
-
-}
-
 }
