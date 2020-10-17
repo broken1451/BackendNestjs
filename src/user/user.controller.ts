@@ -23,12 +23,11 @@ import Token from 'src/utils/token';
 import FileSystem from 'fs';
 import * as fileUpload from 'express-fileupload';
 import * as express from 'express';
-import { AnyFilesInterceptor, FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileFieldsInterceptor, FileInterceptor, MulterModule } from '@nestjs/platform-express';
 import { Response } from 'express';
 import * as Path from 'path';
 import { Usuario } from './schema/userSchema';
-
-
+import * as multer from 'multer';
 
 
 
@@ -163,7 +162,9 @@ export class UserController {
   // subir imagen a user
 
   @Put('/upload/:tipoImagen/:id')
-  @UseInterceptors(FileInterceptor('image'))
+  // @UseInterceptors(FileInterceptor('image', {
+  //   dest: './uploads/usuario'
+  // }))
   // @UseInterceptors(FileFieldsInterceptor([
   //   { name: 'usuario', maxCount: 1 },
   //   // { name: 'monitor', maxCount: 1 },
@@ -218,15 +219,19 @@ export class UserController {
         const nombreImagenPersonalizado = `${id}-${new Date().getMilliseconds()}.${extensionArchivo}`;
 
         // Mover el archivo  del temporal a un path en especifico 
-        // const pat = Path.dirname(__dirname + '/sdsd' );  
-        const path = `/home/muho/Documents/nestJs/invertario/dist/uploads/${tipoImagen}/${nombreImagenPersonalizado}`;  
+        // const pat = Path.dirname(__dirname + `/uploads/${tipoImagen}/${nombreImagenPersonalizado}/usuario` );  
+        // const path = `/home/muho/Documents/nestJs/invertario/dist/user/uploads/user/${tipoImagen}/${nombreImagenPersonalizado}`;  
      
-        // const path = `../uploads/${tipoImagen}/${nombreImagenPersonalizado}`;
+        // const path = `./uploads/${tipoImagen}/${nombreImagenPersonalizado}`;
+        
+        const path = `/home/muho/Documents/nestJs/invertario/dist/user/uploads/${tipoImagen}/${nombreImagenPersonalizado}`;
+        console.log({__dirname, path})
 
         // const path = `/home/muho/Documents/nestJs/invertario/dist/uploads/${tipoImagen}/${nombreImagenPersonalizado}`;
-        console.log({path})
+        // console.log({path})
         // nombreArchivo.mv(path, (err) => {
         nombreArchivo.mv(path, (err) => {
+          console.log({nombreArchivo})
           if (err) {
             console.log({err})
             return res.status(500).json({
@@ -237,27 +242,16 @@ export class UserController {
           }
         })
       
-       // const userUpdate = await this.userService.updateUser(id,user);
-      //  const userUpdate = await  this.userService.subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res);
-        return res.status(200).json({
-          ok: true,
-          menssage: 'funciona', 
-          // imagen,
-          // idUser,
-          // // file: req.files,
-          // // nombreArchivo,
-          // nombreArchivoSeparado,
-          // // extensionArchivo,
-          // nombreImagenPersonalizado,
-          // path,
-          // pat
-          // file
-          // // user,
-          // userUpdate,
-          // userUpdate 
-        });
+      //  const userUpdate = await this.userService.updateUser(id,user);
+       const userUpdate = await this.userService.subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res);
+      //  await console.log({userUpdate})
+      // return res.json({
+      //   ok: true,
+      //   path,
+      //   userUpdate
+      // })
     } catch (error) {
-      console.log(error)
+      console.log({error})
       throw new NotFoundException(
         'No se pudo agregar a la base de datos el usuario ingresado',
       );
