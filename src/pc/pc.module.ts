@@ -14,29 +14,6 @@ export class PcModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     console.log('aca middleware pcmodule')
     consumer.apply(VerifyTokenMiddleware)
-    .exclude(
-        // {
-        //   path: 'user',
-        //   method: RequestMethod.GET,
-        // },
-        // {
-        //   path: 'pc',
-        //   method: RequestMethod.GET,
-        // },
-        // {
-        //   path: 'user/login',
-        //   method: RequestMethod.POST,
-        // },
-        // {
-        //   path: 'user/create',
-        //   method: RequestMethod.POST,
-            
-        // },
-        // {
-        //   path: 'user/upload/',
-        //   method: RequestMethod.PUT,
-        // },
-        ).forRoutes(PcController);
-      
+    .exclude().forRoutes(PcController);
   }
 }

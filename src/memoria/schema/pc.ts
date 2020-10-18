@@ -12,7 +12,7 @@ export const pcSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: "users",
     required: [
-      true,
+      false,
       "Debe de existir una referencia al users, campo obligatorio",
     ],
   },
