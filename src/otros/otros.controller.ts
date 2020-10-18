@@ -175,7 +175,7 @@ export class OtrosController {
           }
         });
   
-        // const otrosUpdate: any = await this.otrosService.subirImagenPorTipo( tipoImagen, id, nombreImagenPersonalizado,res);
+        const otrosUpdate: any = await this.otrosService.subirImagenPorTipo( tipoImagen, id, nombreImagenPersonalizado,res);
      //    return res.json({
      //      ok: true,
      //      path
