@@ -162,6 +162,7 @@ export class OtrosController {
   
         const path = `/home/muho/Documents/nestJs/invertario/dist/otros/uploads/${tipoImagen}/${nombreImagenPersonalizado}`;
         
+        console.log(path)
         nombreArchivo.mv(path, err => {
           // console.log({ path });
           if (err) {
@@ -174,7 +175,7 @@ export class OtrosController {
           }
         });
   
-        const otrosUpdate: any = await this.otrosService.subirImagenPorTipo( tipoImagen, id, nombreImagenPersonalizado,res);
+        // const otrosUpdate: any = await this.otrosService.subirImagenPorTipo( tipoImagen, id, nombreImagenPersonalizado,res);
      //    return res.json({
      //      ok: true,
      //      path
