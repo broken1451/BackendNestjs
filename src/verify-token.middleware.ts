@@ -4,13 +4,14 @@ import Token from './utils/token';
 
 @Injectable()
 export class VerifyTokenMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: () => void) {
+  use(req: any, res: any, next: () => void) {
     // token enviado por los headers
     const userToken = req.get('x-token') || '';
 
     Token.comprobarToken(userToken)
-      .then(decoded => {
-        console.log({ decoded });
+      .then((decoded: any) => {
+        console.log('aca decoded===>', decoded);
+        req.user = decoded.user;
         next();
       })
       .catch(err => {
@@ -19,6 +20,6 @@ export class VerifyTokenMiddleware implements NestMiddleware {
           mensaje: 'token no valido',
         });
       });
-    console.log('middleware');
+    // console.log('middleware');
   }
 }

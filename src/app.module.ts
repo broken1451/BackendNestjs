@@ -12,19 +12,19 @@ import { UserController } from './user/user.controller';
 import * as dotenv from 'dotenv';
 import { VerifyTokenMiddleware } from './verify-token.middleware';
 import { MulterModule } from '@nestjs/platform-express';
+import { PcModule } from './pc/pc.module';
+import { PcController } from './pc/pc.controller';
 dotenv.config();
 
 @Module({
   imports: [
     UserModule,
+    PcModule,
     MongooseModule.forRoot(process.env.URL_DB, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
       useFindAndModify: false,
-    }),
-    MulterModule.register({
-      dest:'./uploads'
     })
   ],
   controllers: [AppController],
@@ -32,11 +32,14 @@ dotenv.config();
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(VerifyTokenMiddleware)
-      .exclude(
+    console.log('ACA MIDDLEWARE PRINCIPAL')
+    consumer.apply(VerifyTokenMiddleware).exclude(
         {
           path: 'user',
+          method: RequestMethod.GET,
+        },
+        {
+          path: 'pc',
           method: RequestMethod.GET,
         },
         {
@@ -50,7 +53,8 @@ export class AppModule implements NestModule {
         {
           path: 'user/upload/',
           method: RequestMethod.PUT,
-        }
-      ).forRoutes(UserController);
+        },
+        ).forRoutes(UserController);
+      
   }
 }

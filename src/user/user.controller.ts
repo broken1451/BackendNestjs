@@ -33,7 +33,7 @@ export class UserController {
 
   constructor(private userService: UserService) {}
 
-  @Get('/')
+  @Get()
   async getAllUsers(@Req() req, @Res() res) {
     const users = await this.userService.getAllUser();
     return res.status(HttpStatus.OK).json({
@@ -77,9 +77,7 @@ export class UserController {
     try {
       user.password = bcrypt.hashSync(user.password, 10);
       console.log({ pass: bcrypt.hashSync(user.password, 10) });
-      const userCreated: UserInterface = await this.userService.createUser(
-        user,
-      );
+      const userCreated: UserInterface = await this.userService.createUser( user );
       const token = Token.getJwtToken(userCreated);
       return res.status(HttpStatus.OK).json({
         ok: true,
@@ -186,7 +184,7 @@ export class UserController {
     try {
       const imagen = tipoImagen;
       const idUser = id;
-      const tipoImagenesValidos = ['usuario', 'monitor', 'memoria', 'otros'];
+      const tipoImagenesValidos = ['usuario', 'pc', 'memoria', 'otros'];
       if (tipoImagenesValidos.indexOf(tipoImagen) < 0) {
         return res.status(400).json({
           ok: false,
