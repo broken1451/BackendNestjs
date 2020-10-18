@@ -14,6 +14,8 @@ import { VerifyTokenMiddleware } from './verify-token.middleware';
 import { MulterModule } from '@nestjs/platform-express';
 import { PcModule } from './pc/pc.module';
 import { PcController } from './pc/pc.controller';
+import { MemoriaModule } from './memoria/memoria.module';
+import { OtrosModule } from './otros/otros.module';
 dotenv.config();
 
 @Module({
@@ -25,7 +27,9 @@ dotenv.config();
       useUnifiedTopology: true,
       useCreateIndex: true,
       useFindAndModify: false,
-    })
+    }),
+    MemoriaModule,
+    OtrosModule
   ],
   controllers: [AppController],
   providers: [AppService],

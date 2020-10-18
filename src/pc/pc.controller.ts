@@ -13,6 +13,8 @@ import {
   } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
 import { Response } from 'express';
+import  * as FileSystem from 'fs';
+import * as Path from 'path';
 
 @Controller('pc')
 export class PcController {
@@ -27,6 +29,32 @@ export class PcController {
         menssage: 'funciona',
         pcs,
       });
+    }
+
+    @Get('/img/:tipoImagen/:imagen')
+    async getImgUser(@Res() res, @Param('tipoImagen') tipoImagen: string, @Param('imagen') imagen: string ) {
+      try {
+        const  pathImagen = Path.resolve(__dirname,`/home/muho/Documents/nestJs/invertario/dist/pc/uploads/${tipoImagen}/${imagen}`); // Resolver el path para que siempre quede correcto, tipoImagen = usuarios / estudiantes, imagen = nombre de imagen
+        // const  pathImagen1 = Path.resolve(__dirname,`../uploads/${tipoImagen}/${imagen}`); // Resolver el path para que siempre quede correcto, tipoImagen = usuarios / estudiantes, imagen = nombre de imagen
+        if (FileSystem.existsSync(pathImagen)) {
+          res.sendFile(pathImagen);
+        }  else {
+          var pathNoImage = Path.resolve(__dirname,`../assets/no-img.jpg`);
+          console.log('pathNoImage: ', pathNoImage);
+          res.sendFile(pathNoImage);
+        }  
+        
+      } catch (error) {
+        console.log({error});
+        return res.status(400).json({
+          ok: false,
+          error: {
+            message: 'No existe imagen en la base de datos',
+            error: 'La img para este usuario no existe',
+            status: HttpStatus.BAD_REQUEST,
+          }
+        });
+      }
     }
 
     @Post('/create') //localhost:3001/user/create
