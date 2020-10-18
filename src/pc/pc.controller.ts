@@ -11,10 +11,8 @@ import {
     Body,
     Param,
   } from '@nestjs/common';
-import { PcDTO } from './dateTransfersObj/pc.dto';
-import { PcInterface } from './interfaces/pc.interfaces';
-import { VerifyTokenMiddleware } from 'src/verify-token.middleware';
 import { NotFoundException } from '@nestjs/common';
+import { Response } from 'express';
 
 @Controller('pc')
 export class PcController {
@@ -113,6 +111,77 @@ export class PcController {
   }
 
 
-  
+   // subir imagen a user
+   @Put('/upload/:tipoImagen/:id')
+   async uploadoImage(@Req() req, @Res() res: Response, @Body() user: any, @Param('id') id: string, @Param('tipoImagen') tipoImagen: string ) {
+     try {
+       const tipoImagenesValidos = ['pc'];
+       if (tipoImagenesValidos.indexOf(tipoImagen) < 0) {
+         return res.status(400).json({
+           ok: false,
+           mensaje: 'tipo de coleccion no valida',
+           errors: {
+             message:
+               'tipo de coleccion no valida solo son permitidas pc',
+           },
+         });
+       }
+ 
+       if (!req.files) {
+         return res.status(400).json({
+           ok: false,
+           mensaje: 'No selecciono nada',
+           errors: { message: 'Debe de seleccionar una imagen' },
+         });
+       }
+ 
+       // Obtener nombre del archivo
+       const nombreArchivo = req.files.image; //imagen es el nombre que esta en el postman
+       const nombreArchivoSeparado = nombreArchivo.name.split('.'); // separar en un arreglo el archivo para tener su extension
+       const extensionArchivo = nombreArchivoSeparado[nombreArchivoSeparado.length - 1]; // obtener la extension del archivo
+ 
+       // Extensiones permitidas
+       const extensionesValida = ['png', 'jpg', 'gif', 'jpeg'];
+       if (extensionesValida.indexOf(extensionArchivo) < 0) {
+         return res.status(400).json({
+           ok: false,
+           mensaje: 'Extension no valida',
+           errors: {
+             message:
+               'La extesion agregada no es permitida solo se admiten estas extensiones: ' +
+               extensionesValida.join(','),
+           },
+         });
+       }
+ 
+       // Nombre de archivo personalizado
+       const nombreImagenPersonalizado = `${id}-${new Date().getMilliseconds()}.${extensionArchivo}`;
+ 
+       const path = `/home/muho/Documents/nestJs/invertario/dist/pc/uploads/${tipoImagen}/${nombreImagenPersonalizado}`;
+       
+       nombreArchivo.mv(path, err => {
+         // console.log({ path });
+         if (err) {
+           console.log({ err });
+           return res.status(500).json({
+             ok: false,
+             mensaje: 'Error al mover archivo',
+             errors: err,
+           });
+         }
+       });
+ 
+       const pcUpdate: any = await this.pcService.subirImagenPorTipo( tipoImagen, id, nombreImagenPersonalizado,res);
+    //    return res.json({
+    //      ok: true,
+    //      path
+    //    })
+     } catch (error) {
+       console.log({ error });
+       throw new NotFoundException('No se pudo agregar a la base de datos del pc ingresado');
+     }
+   }
+
+
 
 }

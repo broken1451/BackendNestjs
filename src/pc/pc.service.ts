@@ -34,7 +34,6 @@ export class PcService {
     }
   }
 
-
   async updatePc(id: string, pc: any): Promise<any> {
     try {
       //   async createUser(usuario: any):  Promise<any> {
@@ -57,18 +56,12 @@ export class PcService {
     }
   }
 
-
   async uploadImgUser(tipoImagen, id, nombreImagenPersonalizado,res): Promise<any> {
     try {
       //   async createUser(usuario: any):  Promise<any> {
       // const user =  await this.subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res);
-    //   const user = await this.subirImagenPorTipo(
-    //     tipoImagen,
-    //     id,
-    //     nombreImagenPersonalizado,
-    //     res,
-    //   );
-    //   return user;
+      const pcs = await this.subirImagenPorTipo( tipoImagen, id, nombreImagenPersonalizado, res );
+      return pcs;
     } catch (error) {
       console.log({ error });
     }
@@ -76,12 +69,10 @@ export class PcService {
 
 
   async subirImagenPorTipo(tipoImagen, id, nombreImagenPersonalizado, res) {
-    if (tipoImagen == 'usuario') {
+    if (tipoImagen == 'pc') {
       console.log('ACA');
-
       try {
         this.pcModel.findById(id, (err, usuario) => {
-          // console.log('USER ====>>> ', usuario);
           if (err) {
             return res.status(500).json({
               ok: false,
@@ -100,8 +91,8 @@ export class PcService {
           if (usuario.img === '' || !usuario.img ) {
             usuario.img = nombreImagenPersonalizado ;
           } 
-          console.log({usuario, img: usuario.img })
-          const pathViejo ='/home/muho/Documents/nestJs/invertario/dist/user/uploads/usuario/' + usuario.img; // pathViejo de la imagen si el usuario ya tiene una guardada
+          const pathViejo ='/home/muho/Documents/nestJs/invertario/dist/pc/uploads/pc/' + usuario.img; // pathViejo de la imagen si el usuario ya tiene una guardada
+          
           if (FileSystem.existsSync(pathViejo)) {  // si existe elimina la imagen anterior
             FileSystem.unlink(pathViejo,(err) => {
                 if (err) {
@@ -114,10 +105,9 @@ export class PcService {
             });
         }
 
-
           usuario.img = nombreImagenPersonalizado;
-          usuario.save((err, usuarioActualizado) => {
-            console.log({ usuarioActualizado });
+          usuario.save((err, pcImgActualizado) => {
+            // console.log({ pcImgActualizado });
             if (err) {
               return res.status(400).json({
                 ok: false,
@@ -125,11 +115,11 @@ export class PcService {
                 errors: err,
               });
             }
-            usuarioActualizado.password = ':)';
+            pcImgActualizado.password = ':)';
             return res.status(200).json({
               ok: true,
               mensaje: 'Imagen de usuario actualizada ',
-              usuarioActualizado: usuarioActualizado,
+              pcImgActualizado: pcImgActualizado,
             });
           });
         });
