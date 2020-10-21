@@ -4,15 +4,15 @@ import { Schema } from 'mongoose';
 
 
 
-export const pcSchema = new mongoose.Schema({
-  nameModel: { type: String, required: [true, 'El nombre es necesario y unico'] },
+export const memoriaSchema = new mongoose.Schema({
+  name: { type: String, required: [true, 'El nombre es necesario y unico'] },
   img: { type: String, default: '' },
   type: {type: String , default: ''},
   usuario: {
     type: Schema.Types.ObjectId,
     ref: "users",
     required: [
-      false,
+      true,
       "Debe de existir una referencia al users, campo obligatorio",
     ],
   },
@@ -23,5 +23,5 @@ export const pcSchema = new mongoose.Schema({
     // usuarioSchema.plugin(uniqueValidator, {message: 'El correo debe ser unico'});
 // userSchema.plugin(uniqueValidator, {message: '{PATH} debe ser unico'});
 // pcSchema.plugin<any>(uniqueValidator, {message: '{PATH} debe ser unico'})
-export const Pcs = mongoose.model<any>("pcs", pcSchema);
+export const Memorias = mongoose.model<any>("memorias", memoriaSchema);
 // module.exports =  mongoose.model('users', userSchema);
