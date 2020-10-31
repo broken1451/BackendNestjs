@@ -78,13 +78,13 @@ export class UserController {
       user.password = bcrypt.hashSync(user.password, 10);
       console.log({ pass: bcrypt.hashSync(user.password, 10) });
       const userCreated: UserInterface = await this.userService.createUser( user );
-      const token = Token.getJwtToken(userCreated);
+      // const token = Token.getJwtToken(userCreated);
       return res.status(HttpStatus.OK).json({
         ok: true,
         menssage: 'funciona',
         // user,
         userCreated,
-        token,
+        // token,
       });
     } catch (error) {
       console.log('error', error);
@@ -105,12 +105,14 @@ export class UserController {
     // console.log({req, res})
     try {
       const userUpdate = await this.userService.updateUser(id, user);
-
+      userUpdate.password = ':)'
+      // const token = Token.getJwtToken(userUpdate);
       return res.status(HttpStatus.OK).json({
         ok: true,
         menssage: 'funciona',
         // user,
         userUpdate,
+        // token
       });
     } catch (error) {
       throw new NotFoundException(
@@ -138,17 +140,19 @@ export class UserController {
   }
 
   @Post('/login') //localhost:3001/user/create
-  async logineUser(@Req() req, @Res() res, @Body() user: UserInterface) {
+  async logineUser(@Req() req, @Res() res, @Body() user: any) {
     // console.log({req, res})
     try {
       const userLogin = await this.userService.login(user.email);
-
+      console.log({user})
+      const token = Token.getJwtToken(userLogin);
       if (comparPass(user.password, userLogin.password)) {
         return res.status(HttpStatus.OK).json({
           ok: true,
           menssage: 'funciona',
           userLogin,
-          pass: user.password,
+          // pass: user.password,
+          token: token
         });
       } else if (user.password == '' || userLogin.password == '') {
         return res.status(400).json({

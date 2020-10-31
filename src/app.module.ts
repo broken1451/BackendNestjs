@@ -38,10 +38,10 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     console.log('ACA MIDDLEWARE PRINCIPAL')
     consumer.apply(VerifyTokenMiddleware).exclude(
-        {
-          path: 'user',
-          method: RequestMethod.GET,
-        },
+        // {
+        //   path: 'user',
+        //   method: RequestMethod.GET,
+        // },
         {
           path: 'pc',
           method: RequestMethod.GET,
@@ -50,10 +50,10 @@ export class AppModule implements NestModule {
           path: 'user/login',
           method: RequestMethod.POST,
         },
-        {
-          path: 'user/create',
-          method: RequestMethod.POST,
-        },
+        // {
+        //   path: 'user/create',
+        //   method: RequestMethod.POST,
+        // },
         {
           path: 'user/upload/',
           method: RequestMethod.PUT,

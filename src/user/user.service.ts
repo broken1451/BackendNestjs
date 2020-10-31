@@ -18,8 +18,9 @@ export class UserService {
   // constructor(@InjectModel('user') public userModel: Model<UserInterface> ) {} // injectar el modelo en esta clase
 
   async getAllUser(): Promise<any> {
-    const users = await this.userModel.find({}).exec();
-    return users;
+    const users = await this.userModel.find({},'_id name email img created').exec();
+    const conutsUser = await this.userModel.countDocuments({});
+    return { users,conutsUser};
   }
 
   async createUser(usuario: UserDTO): Promise<any> {
