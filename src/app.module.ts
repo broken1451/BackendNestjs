@@ -38,10 +38,10 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     console.log('ACA MIDDLEWARE PRINCIPAL')
     consumer.apply(VerifyTokenMiddleware).exclude(
-        // {
-        //   path: 'user',
-        //   method: RequestMethod.GET,
-        // },
+        {
+          path: 'user/img/:tipoImagen/:imagen',
+          method: RequestMethod.GET
+        },
         {
           path: 'pc',
           method: RequestMethod.GET,
