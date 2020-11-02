@@ -58,6 +58,10 @@ export class AppModule implements NestModule {
           path: 'user/upload/',
           method: RequestMethod.PUT,
         },
+        {
+          path: 'user/upload/:tipoImagen/:id',
+          method: RequestMethod.PUT,
+        },
         ).forRoutes(UserController);
       
   }

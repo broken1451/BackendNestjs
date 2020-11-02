@@ -264,7 +264,7 @@ export class UserController {
       // })
     } catch (error) {
       console.log({ error });
-      throw new NotFoundException('No se pudo agregar a la base de datos el usuario ingresado');
+      throw new NotFoundException('No se pudo agregar a la base de datos la imagen ingresada');
     }
   }
 }
