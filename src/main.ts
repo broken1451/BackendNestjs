@@ -20,7 +20,9 @@ async function bootstrap() {
 
   // FileUpload
   // app.use(fileUpload({ useTempFiles: true }));
-  app.use(fileUpload());  
+  app.use(fileUpload({
+    createParentPath: true
+}));  
 
   // Cors
   app.use(cors({ origin: true, credentials: true }));

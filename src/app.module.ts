@@ -50,6 +50,10 @@ export class AppModule implements NestModule {
           path: 'user/login',
           method: RequestMethod.POST,
         },
+        {
+          path: 'pc/uploadImgs',
+          method: RequestMethod.POST,
+        },
         // {
         //   path: 'user/create',
         //   method: RequestMethod.POST,
